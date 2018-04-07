@@ -1,12 +1,8 @@
 from tkinter import *
 import random
 from board import *
-
-def inBoard(x, y, data):
-    r = data.cellSize//2
-    nR = len(data.maze)
-    nC = len(data.maze[0])
-    return (r < x < ((data.cellSize * nC) - r)) and (r < y < ((data.cellSize * nR) - r))
+from pacman import Pacman
+from monster import Monster
 
 ############################################################################
 # Basic animation frame work from 112 website
@@ -26,19 +22,19 @@ def init(data):
                 [0, 1, 0, 1, 0, 1, 1, 1]*2 + [0, 0],
                 [0, 1, 0, 1, 0, 1, 0, 0]*2 + [0, 0],
                 [0, 1, 0, 1, 0, 1, 1, 1]*2 + [0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]*2 + [0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0]*2 + [0, 0]]
     data.gameOver = False
     data.timer = 0
     data.cellSize = 30
     data.board = Board(data.maze)
     data.rows, data.cols = len(data.maze), len(data.maze[0])
-    data.x = random.randint(1, data.width - 1)
-    data.y = random.randint(1, data.height - 1)
     #moves by width and height of each cell
-    data.speedX, data.speedY = data.cellSize//2, data.cellSize//2 
+    data.speedX, data.speedY = data.cellSize, data.cellSize
     data.counter = 0
     data.directions = ['up', 'down', 'left', 'right']
     data.direction = random.choice(data.directions)
+    data.pacman = Pacman(data.rows//2 + 1, data.cols//2 + 1, data)
 
 def mousePressed(event, data):
 # use event.x and event.y
@@ -46,8 +42,15 @@ def mousePressed(event, data):
 
 def keyPressed(event, data):
 # use event.char and event.keysym
-    pass
-
+    if (event.keysym == "Up"):
+        data.pacman.move(0, -data.cellSize, data)
+    elif (event.keysym == "Down"):
+        data.pacman.move(0, data.cellSize, data)
+    elif (event.keysym == "Left"):
+        data.pacman.move(-data.cellSize, 0, data)
+    elif (event.keysym == "Right"):
+        data.pacman.move(data.cellSize, 0, data)
+    print(data.pacman.x, data.pacman.y)
 def timerFired(data):
     if data.timer == 0:
         Monster.all_monsters.append(Monster(data, "red"))
@@ -64,7 +67,8 @@ def timerFired(data):
 def redrawAll(canvas, data):
 # draw in canvas
     data.board.drawBoard(canvas)
-    Monster.draw(canvas)
+    Monster.draw(data, canvas)
+    data.pacman.drawPacman(canvas)
 
 ####################################
 # use the run function as-is
@@ -113,3 +117,5 @@ def run(width=300, height=300):
     print("bye!")
 
 run(520, 400)
+"""x: 0, 600
+y: 0, 500"""
