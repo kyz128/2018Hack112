@@ -75,13 +75,13 @@ def init(data):
     data.speedX, data.speedY = data.cellSize, data.cellSize
     data.counter = 0
     data.directions = ['up', 'down', 'left', 'right']
-    data.direction = random.choice(data.directions)
+    data.mdirection = 'right'
+    data.direction = 'Right'
     data.pacman = Pacman(data.cols//2 - 1, data.rows//2 - 1, data)
     data.center = None
-    data.direction= "down"
     data.lives = 3
     data.score = 0
-    data.monsterCenter = 0, 0
+    data.monsterCenter = 0, 1
     data.monster = Monster(data, 'red')
 
 def mousePressed(event, data):
@@ -117,9 +117,7 @@ def cameraFired(data):
             data.center= (0,0)
 
 
-        cv2.circle(data.frame, data.center, 2, (0, 0, 255), 5)
-       # cv2.line(data.frame, data.points[i - 1], data.center, (0, 255, 0), 5)
-   
+        cv2.circle(data.frame, data.center, 2, (255, 0, 0), 5)
 
 def drawCamera(canvas, data):
     data.tk_image = opencvToTk(data.frame)
@@ -147,27 +145,25 @@ def timerFired(data):
             
        
     dr, dc = 0, 0
-    if data.direction == 'up':
+    if data.mdirection == 'up':
         dr, dc = -1, 0
-    elif data.direction == 'down':
+    elif data.mdirection == 'down':
         dr, dc = 1, 0
-    elif data.direction == 'left':
+    elif data.mdirection == 'left':
         dr, dc = 0, -1
-    elif data.direction == 'right':
+    elif data.mdirection == 'right':
         dr, dc = 0, 1
     
     data.monster.move(data, dr, dc)
-    
     if collideWithWalls(data.monster.r + dr, data.monster.c + dc, data):
-        directions = ['up', 'down', 'left', 'right'].remove(data.direction)
-        direction = random.choice(directions)
-        if data.direction == 'up':
+        data.mdirection = data.directions[(data.directions.index(data.mdirection) + 1) % 4]
+        if data.mdirection == 'up':
             dr, dc = -1, 0
-        elif data.direction == 'down':
+        elif data.mdirection == 'down':
             dr, dc = 1, 0
-        elif data.direction == 'left':
+        elif data.mdirection == 'left':
             dr, dc = 0, -1
-        elif data.direction == 'right':
+        elif data.mdirection == 'right':
             dr, dc = 0, 1
         data.monster.move(data, dr, dc)
 
