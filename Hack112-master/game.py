@@ -66,7 +66,6 @@ def init(data):
                     [0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    data.food = data.maze
     data.gameOver = False
     data.timer = 0
     data.cellSize = 30
@@ -83,7 +82,7 @@ def init(data):
     data.lives = 3
     data.score = 0
     data.monsterCenter = 0, 1
-    data.monster = Monster(data, 'red')
+    data.monster = Monster(data)
     data.food= copy.deepcopy(data.maze)
 
 def mousePressed(event, data):
@@ -127,7 +126,7 @@ def drawCamera(canvas, data):
     
 def timerFired(data):
     if data.timer == 0:
-        Monster.all_monsters.append(Monster(data, "red"))
+        Monster.all_monsters.append(Monster(data))
 
     data.timer += 100 #tracks number of milliseconds (1000 milliseconds = 1 sec)
     if data.center!=None:
@@ -145,31 +144,6 @@ def timerFired(data):
             data.pacman.move(0, data.cellSize, data)
             data.direction= "Down"
             
-       
-    dr, dc = 0, 0
-    if data.mdirection == 'up':
-        dr, dc = -1, 0
-    elif data.mdirection == 'down':
-        dr, dc = 1, 0
-    elif data.mdirection == 'left':
-        dr, dc = 0, -1
-    elif data.mdirection == 'right':
-        dr, dc = 0, 1
-    
-    data.monster.move(data, dr, dc)
-    if collideWithWalls(data.monster.r + dr, data.monster.c + dc, data):
-        data.mdirection = data.directions[(data.directions.index(data.mdirection) + 1) % 4]
-        if data.mdirection == 'up':
-            dr, dc = -1, 0
-        elif data.mdirection == 'down':
-            dr, dc = 1, 0
-        elif data.mdirection == 'left':
-            dr, dc = 0, -1
-        elif data.mdirection == 'right':
-            dr, dc = 0, 1
-        data.monster.move(data, dr, dc)
-
-    data.monster.move(data, dr, dc)
     data.pacman.eatFood(data)
             
 def drawScore(data, canvas):
@@ -189,7 +163,7 @@ def redrawAll(canvas, data):
     data.board.drawFood(data, canvas)
     drawScore(data, canvas)
     drawLives(data, canvas)
-    Monster.draw(data, canvas)
+    data.monster.draw(canvas)
     data.pacman.drawPacman(canvas, data)
     drawCamera(canvas, data)
 
