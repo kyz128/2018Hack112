@@ -1,3 +1,4 @@
+import random 
 def inBoard(x, y, data):
     r = data.cellSize//2
     nR = len(data.maze)
@@ -9,14 +10,16 @@ class Monster(object):
     
     def __init__(self, data, color):
         self.color = color
-        self.x, self.y = data.x, data.y
+        self.x = random.randint(1, data.width - 1)
+        self.y = random.randint(1, data.height - 1)
         self.r, self.c = self.x//data.cellSize, self.y//data.cellSize
-        self.d = data.cellSize #diameter of monster
+        Monster.all_monsters.append(self)
     
     @staticmethod
-    def draw(canvas):
-        canvas.create_oval(monster.x, monster.y, monster.x + monster.d,
-                            monster.y + monster.d, fill = monster.color)
+    def draw(data, canvas):
+        for monster in Monster.all_monsters:
+            canvas.create_oval(monster.x, monster.y, monster.x + data.cellSize,
+                            monster.y + data.cellSize, fill = monster.color)
     
     @staticmethod
     def move(data, direction):
@@ -33,9 +36,10 @@ class Monster(object):
                 temp[0] -= data.speedX
             elif direction == 'right':
                 temp[0] += data.speedX
-            # if not monster.collideWithWalls(monster.r, monster.c, data):
+            
+            if not monster.collideWithWalls(monster.r, monster.c, data):
             # #move the monster only if the next position is valid
-            monster.x, monster.y = temp[0], temp[1]
+                monster.x, monster.y = temp[0], temp[1]
     
     @staticmethod
     def collideWithWalls(row, col, data):
