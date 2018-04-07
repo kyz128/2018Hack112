@@ -11,7 +11,7 @@ import cv2
 redLower= (170,70,50)
 redUpper= (180,255,255)
 
-#animation framework with openCV modeled from https://github.com/VasuAgrawal/112-opencv-tutorial/blob/master/opencvTkinterTemplate.py
+#animation framework with openCV modeled from ___insert link
 import time
 import sys
 
@@ -68,6 +68,7 @@ def init(data):
     data.pacman = Pacman(data.cols//2 - 1, data.rows//2 - 1, data)
     data.points = deque(maxlen= 64)
     data.center = None
+    data.direction= "Right"
 
 def mousePressed(event, data):
 # use event.x and event.y
@@ -131,12 +132,16 @@ def timerFired(data):
         x, y= data.center[0], data.center[1]
         if x > 550:
             data.pacman.move(-data.cellSize, 0, data)
+            data.direction= "Left"
         elif x < 150:
             data.pacman.move(data.cellSize, 0, data)
+            data.direction="Right"
         elif y < 100:
             data.pacman.move(0, -data.cellSize, data)
+            data.direction= "Up"
         elif y > 410:
             data.pacman.move(0, data.cellSize, data)
+            data.direction= "Down"
         for monster in Monster.all_monsters:
             monster.move(data, data.direction)
             # #if move wasn't valid, choose a new direction
@@ -148,7 +153,7 @@ def redrawAll(canvas, data):
 # draw in canvas
     data.board.drawBoard(canvas)
     Monster.draw(data, canvas)
-    data.pacman.drawPacman(canvas)
+    data.pacman.drawPacman(canvas, data)
     drawCamera(canvas, data)
 
 ####################################
