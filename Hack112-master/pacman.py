@@ -1,3 +1,5 @@
+from PIL import ImageTk, Image  
+      
 def collideWithWalls(row, col, data):
     for i in range(len(data.maze)):
         for j in range(len(data.maze[0])):
@@ -27,7 +29,19 @@ class Pacman(object):
                 self.x = temp[0]
                 self.y = temp[1]
 
-    def drawPacman(self, canvas, color="yellow"):
-        r = self.size
-        canvas.create_oval(self.x-r, self.y-r, 
-                           self.x+r, self.y+r, fill=color)
+
+    def drawPacman(self, canvas, data):
+        im = Image.open('pacman.png')
+        if data.direction=="Right":
+            canvas.image = ImageTk.PhotoImage(im)
+        elif data.direction=="Left":
+            canvas.image = ImageTk.PhotoImage(im.transpose(Image.FLIP_LEFT_RIGHT))
+        elif data.direction=="Up":
+            canvas.image = ImageTk.PhotoImage(im.rotate(90))
+        elif data.direction=="Down":
+            canvas.image = ImageTk.PhotoImage(im.rotate(-90))
+        canvas.create_image(self.x, self.y, image=canvas.image)
+
+
+
+
