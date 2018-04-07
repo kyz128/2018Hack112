@@ -71,7 +71,7 @@ def init(data):
     data.direction = random.choice(data.directions)
     data.pacman = Pacman(data.cols//2 - 1, data.rows//2 - 1, data)
     data.center = None
-    data.direction= "Right"
+    data.direction= "down"
     data.lives = 3
     data.score = 0
     data.monsterCenter = 0, 0
