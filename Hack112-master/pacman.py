@@ -32,7 +32,7 @@ class Pacman(object):
     def eatFood(self,data):
         for i in range(len(data.food)):
             for j in range(len(data.food[0])):
-                if ((data.food[i][j] == 0) and ((self.x)//data.cellSize, (self.y)//data.cellSize)==(i, j)):
+                if ((data.food[i][j] == 0) and ((self.x)//data.cellSize, (self.y)//data.cellSize)==(j, i)):
                     data.food[i][j]= 1
 
 
