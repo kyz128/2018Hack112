@@ -1,5 +1,6 @@
 import random 
 import copy
+from PIL import ImageTk, Image
 
 class Monster(object):
     all_monsters = []
@@ -10,17 +11,22 @@ class Monster(object):
         self.r, self.c = data.monsterCenter[0], data.monsterCenter[1]
         Monster.all_monsters.append(self)
     
-    @staticmethod
-    def draw(data, canvas):
-        for monster in Monster.all_monsters:
-            r = monster.size
-            canvas.create_oval(monster.r * monster.size, monster.c * monster.size,
-                    (monster.r + 1) * monster.size, (monster.c + 1) * monster.size,
-                    fill = monster.color)
     
+    def draw(self, data, canvas):
+    #image from http://chapmanworld.com/wp-content/uploads/2015/02/pacman.png
+        r = self.size
+        monster = Image.open('redMonster.png')
+        canvas.image = ImageTk.PhotoImage(monster)
+
     def move(self, data, dr, dc):
     #moves monster
         if data.gameOver: return
-        if ((0 < self.r + dr < data.cols) and (0 < self.c + dc < data.rows)):
-                self.x += dx
-                self.y += dy
+        if ((0 < self.r + dr < data.cols) and (1 < self.c + dc < data.rows)):
+                self.r += dr
+                self.c += dc
+    
+    def collideWithPacMan(self, data):
+        if (self.r == data.center[0]) and (self.c == data.center[1]):
+            data.lives -= 1
+            data.monsterCenter = 0, 1
+            data.center = data.cols//2 - 1, data.rows//2 - 1
