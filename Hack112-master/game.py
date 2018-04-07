@@ -43,7 +43,8 @@ def opencvToTk(frame):
 ############################################################################
 def init(data):
 # load data.xyz as appropriate
-    data.maze = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    data.maze = [   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0],
                     [0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
                     [0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0],
@@ -57,6 +58,7 @@ def init(data):
                     [0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    data.food = data.maze
     data.gameOver = False
     data.timer = 0
     data.cellSize = 30
@@ -68,9 +70,10 @@ def init(data):
     data.directions = ['up', 'down', 'left', 'right']
     data.direction = random.choice(data.directions)
     data.pacman = Pacman(data.cols//2 - 1, data.rows//2 - 1, data)
-    data.points = deque(maxlen= 64)
     data.center = None
     data.direction= "Right"
+    data.lives = 3
+    data.score = 0
 
 def mousePressed(event, data):
 # use event.x and event.y
@@ -80,16 +83,6 @@ def keyPressed(event, data):
     if event.keysym == "q":
         data.root.destroy()
     pass
-# use event.char and event.keysym
-    if (event.keysym == "Up"):
-        data.pacman.move(0, -data.cellSize, data)
-    elif (event.keysym == "Down"):
-        data.pacman.move(0, data.cellSize, data)
-    elif (event.keysym == "Left"):
-        data.pacman.move(-data.cellSize, 0, data)
-    elif (event.keysym == "Right"):
-        data.pacman.move(data.cellSize, 0, data)
-    
         
 def cameraFired(data):
     """Called whenever new camera frames are available.
@@ -128,8 +121,6 @@ def timerFired(data):
         Monster.all_monsters.append(Monster(data, "red"))
 
     data.timer += 100 #tracks number of milliseconds (1000 milliseconds = 1 sec)
-    """x: 0, 600
-    y: 0, 500"""
     if data.center!=None:
         x, y= data.center[0], data.center[1]
         if x > 550:
@@ -144,16 +135,24 @@ def timerFired(data):
         elif y > 410:
             data.pacman.move(0, data.cellSize, data)
             data.direction= "Down"
-        for monster in Monster.all_monsters:
-            monster.move(data, data.direction)
-            # #if move wasn't valid, choose a new direction
-            # newDirections = data.directions.remove(data.direction)
-            # data.direction = random.choice(newDirections)
-            # move(data, data.direction)
+            
+def drawScore(data, canvas):
+    font = "Arial %d bold" % (data.cellSize//1.5)
+    canvas.create_text(data.cellSize*2 + data.cellSize/2, data.cellSize/10 + data.cellSize/2, 
+                        text = "Score: %d" % data.score, 
+                        fill = "yellow", font = font)
+    
+def drawLives(data, canvas):
+    font = "Arial %d bold" % (data.cellSize//1.5)
+    canvas.create_text((data.cols-2)*data.cellSize - data.cellSize, data.cellSize/10 + data.cellSize/2, 
+                        text = "%d lives" % data.lives, fill = "red", font = font)
 
 def redrawAll(canvas, data):
 # draw in canvas
     data.board.drawBoard(canvas)
+    data.board.drawFood(data, canvas)
+    drawScore(data, canvas)
+    drawLives(data, canvas)
     Monster.draw(data, canvas)
     data.pacman.drawPacman(canvas, data)
     drawCamera(canvas, data)
@@ -193,7 +192,7 @@ def run(width=300, height=300):
         timerFired(data)
         end = time.time()
         diff_ms = (end - start) * 1000
-        delay = int(max(data.timer_delay - diff_ms, 0))
+        delay = int(max(data.timer_delay - diff_ms, 100))
         data.root.after(delay, lambda: timerFiredWrapper(data))
 
     # Wait a timer delay before beginning, to allow everything else to
@@ -217,7 +216,7 @@ def run(width=300, height=300):
         diff_ms = (end - start) * 1000
 
         # Have at least a 5ms delay between redraw. Ideally higher is better.
-        delay = int(max(data.redraw_delay - diff_ms, 5))
+        delay = int(max(data.redraw_delay - diff_ms, 20))
 
         data.root.after(delay, lambda: redrawAllWrapper(canvas, data))
 
@@ -231,4 +230,4 @@ def run(width=300, height=300):
     print("Releasing camera!")
     data.camera.release()
 
-run(1150, 400)
+run(1150, 420)
