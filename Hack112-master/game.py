@@ -145,7 +145,22 @@ def timerFired(data):
             data.pacman.move(0, data.cellSize, data)
             data.direction= "Down"
             
-        dr, dc = 0, 0
+       
+    dr, dc = 0, 0
+    if data.direction == 'up':
+        dr, dc = -1, 0
+    elif data.direction == 'down':
+        dr, dc = 1, 0
+    elif data.direction == 'left':
+        dr, dc = 0, -1
+    elif data.direction == 'right':
+        dr, dc = 0, 1
+    
+    data.monster.move(data, dr, dc)
+    
+    if collideWithWalls(data.monster.r + dr, data.monster.c + dc, data):
+        directions = ['up', 'down', 'left', 'right'].remove(data.direction)
+        direction = random.choice(directions)
         if data.direction == 'up':
             dr, dc = -1, 0
         elif data.direction == 'down':
@@ -154,24 +169,9 @@ def timerFired(data):
             dr, dc = 0, -1
         elif data.direction == 'right':
             dr, dc = 0, 1
-        
         data.monster.move(data, dr, dc)
-        if collideWithWalls(monster.r + dr, monster.c + dc, data):
-            directions = ['up', 'down', 'left', 'right'].remove(data.direction)
-            direction = random.choice(directions)
-            if data.direction == 'up':
-                dr, dc = -1, 0
-            elif data.direction == 'down':
-                dr, dc = 1, 0
-            elif data.direction == 'left':
-                dr, dc = 0, -1
-            elif data.direction == 'right':
-                dr, dc = 0, 1
-            monster.move(data, dr, dc)
 
-
-
-        monster.move(data, dr, dc)
+    data.monster.move(data, dr, dc)
             
 def drawScore(data, canvas):
     font = "Arial %d bold" % (data.cellSize//1.5)
