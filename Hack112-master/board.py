@@ -20,7 +20,7 @@ class Board(object):
                     canvas.create_rectangle(j * data.cellSize + data.cellSize/3, i * data.cellSize + data.cellSize/3,
                                 (j + 1) * data.cellSize - data.cellSize/3, (i + 1) * data.cellSize - data.cellSize/3,
                                 fill = "tan")
-
+        
 
     def drawBoard(self, canvas):
         board = self.board
