@@ -7,6 +7,7 @@ from monster import Monster
 from collections import deque
 import numpy as np
 import cv2
+import copy
 
 redLower= (170,70,50)
 redUpper= (180,255,255)
@@ -83,6 +84,7 @@ def init(data):
     data.score = 0
     data.monsterCenter = 0, 1
     data.monster = Monster(data, 'red')
+    data.food= copy.deepcopy(data.maze)
 
 def mousePressed(event, data):
 # use event.x and event.y
