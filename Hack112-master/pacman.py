@@ -6,7 +6,8 @@ def collideWithWalls(row, col, data):
             if ((data.maze[i][j] == 1) and (row == j) and (col == i)):
                 return True
     return False
-    
+
+
 class Pacman(object):
 
     def __init__(self, row, col, data):
@@ -28,12 +29,13 @@ class Pacman(object):
             else:
                 self.x = temp[0]
                 self.y = temp[1]
-                  
+    
     def eatFood(self,data):
         for i in range(len(data.food)):
             for j in range(len(data.food[0])):
                 if ((data.food[i][j] == 0) and ((self.x)//data.cellSize, (self.y)//data.cellSize)==(j, i)):
                     data.food[i][j]= 1
+                    data.score += 10
 
 
     def drawPacman(self, canvas, data):
@@ -47,6 +49,7 @@ class Pacman(object):
         elif data.direction=="Down":
             canvas.image = ImageTk.PhotoImage(im.rotate(-90))
         canvas.create_image(self.x, self.y, image=canvas.image)
+
 
 
 
