@@ -74,6 +74,8 @@ def init(data):
     data.direction= "Right"
     data.lives = 3
     data.score = 0
+    data.monsterCenter = 0, 0
+    data.monster = Monster(data, 'red')
 
 def mousePressed(event, data):
 # use event.x and event.y
@@ -135,6 +137,34 @@ def timerFired(data):
         elif y > 410:
             data.pacman.move(0, data.cellSize, data)
             data.direction= "Down"
+            
+        dr, dc = 0, 0
+        if data.direction == 'up':
+            dr, dc = -1, 0
+        elif data.direction == 'down':
+            dr, dc = 1, 0
+        elif data.direction == 'left':
+            dr, dc = 0, -1
+        elif data.direction == 'right':
+            dr, dc = 0, 1
+        
+        data.monster.move(data, dr, dc)
+        if collideWithWalls(monster.r + dr, monster.c + dc, data):
+            directions = ['up', 'down', 'left', 'right'].remove(data.direction)
+            direction = random.choice(directions)
+            if data.direction == 'up':
+                dr, dc = -1, 0
+            elif data.direction == 'down':
+                dr, dc = 1, 0
+            elif data.direction == 'left':
+                dr, dc = 0, -1
+            elif data.direction == 'right':
+                dr, dc = 0, 1
+            monster.move(data, dr, dc)
+
+
+
+        monster.move(data, dr, dc)
             
 def drawScore(data, canvas):
     font = "Arial %d bold" % (data.cellSize//1.5)
