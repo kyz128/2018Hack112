@@ -13,7 +13,6 @@ class Pacman(object):
         self.size = (data.cellSize*2/3)/2
     
     def move(self, dx, dy, data):
-        temp = self.x, self.y
         if collideWithWalls((self.x + dx)//data.cellSize,
                             (self.y + dy)//data.cellSize, data):
             pass
