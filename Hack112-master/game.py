@@ -14,6 +14,13 @@ redUpper= (180,255,255)
 #animation framework with openCV/tkinter integration modeled from Vasu Agrawal
 #https://github.com/VasuAgrawal/112-opencv-tutorial/blob/master/opencvTkinterTemplate.py
 
+def collideWithWalls(row, col, data):
+    for i in range(len(data.maze)):
+        for j in range(len(data.maze[0])):
+            if ((data.maze[i][j] == 1) and (row == i) and (col == j)):
+                return True
+    return False
+
 import time
 import sys
 
