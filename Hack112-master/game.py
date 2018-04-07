@@ -170,6 +170,7 @@ def timerFired(data):
         data.monster.move(data, dr, dc)
 
     data.monster.move(data, dr, dc)
+    data.pacman.eatFood(data)
             
 def drawScore(data, canvas):
     font = "Arial %d bold" % (data.cellSize//1.5)
