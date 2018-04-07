@@ -1,35 +1,17 @@
-import socket
-
 class Pacman(object):
 
-    def __init__(self, PID, x, y, points=0):
-        self.PID = PID
+    def __init__(self, x, y, data):
         self.x = x
         self.y = y
-        self.size = 30
-        self.points= points
-    
-    @staticmethod
-    def food(data):
-        data.food=[]
-        for row in range(len(data.board)):
-            for col in range(len(data.board[0])):
-                if data.board[row][col]==0:
-                    data.food.append((row,col))
+        self.size = (data.cellSize*2/3)/2
             
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
+    def move(self, dx, dy, data):
+        if ((data.cellSize//2 < self.x + dx < data.cols-1*data.cellSize)
+            and (data.cellSize//2 < self.y + dy < data.rows*data.cellSize):
+            self.x += dx
+            self.y += dy
 
-    def changePID(self, PID):
-        self.PID = PID
-    
-    def eat(self):
-        self.points+=10
-
-    def drawPacman(self, canvas, color):
+    def drawPacman(self, canvas, color="yellow"):
         r = self.size
         canvas.create_oval(self.x-r, self.y-r, 
                            self.x+r, self.y+r, fill=color)
-        canvas.create_text(self.x, self.y, text=self.PID, fill="white")
-
