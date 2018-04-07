@@ -28,6 +28,12 @@ class Pacman(object):
             else:
                 self.x = temp[0]
                 self.y = temp[1]
+                  
+    def eatFood(self,data):
+        for i in range(len(data.food)):
+            for j in range(len(data.food[0])):
+                if ((data.food[i][j] == 0) and ((self.x)//data.cellSize, (self.y)//data.cellSize)==(i, j)):
+                    data.food[i][j]= 1
 
 
     def drawPacman(self, canvas, data):
