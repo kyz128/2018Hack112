@@ -13,9 +13,10 @@ class Pacman(object):
         self.size = (data.cellSize*2/3)/2
     
     def move(self, dx, dy, data):
-        if ((data.cellSize//2 < self.x + dx < data.cols*data.cellSize)
-            and (data.cellSize//2 < self.y + dy < data.rows*data.cellSize)
-            and not collideWithWalls(self.x//data.cellSize, self.y//data.cellSize, data)):
+        if ((0 <= self.x + dx < (data.cols-1)*data.cellSize)
+            and (0 <= self.y + dy < (data.rows-1)*data.cellSize)):
+            #not collideWithWalls((self.x-data.cellSize/2)//data.cellSize, (self.y-data.cellSize/2)//data.cellSize, data)):
+            print(self.x//data.cols, self.y//data.rows)
             self.x += dx
             self.y += dy
 
@@ -23,6 +24,11 @@ class Pacman(object):
         r = self.size
         canvas.create_oval(self.x-r, self.y-r, 
                            self.x+r, self.y+r, fill=color)
+
+
+
+
+
 
 
 
