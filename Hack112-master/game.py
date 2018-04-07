@@ -11,7 +11,9 @@ import cv2
 redLower= (170,70,50)
 redUpper= (180,255,255)
 
-#animation framework with openCV modeled from ___insert link
+#animation framework with openCV/tkinter integration modeled from Vasu Agrawal
+#https://github.com/VasuAgrawal/112-opencv-tutorial/blob/master/opencvTkinterTemplate.py
+
 import time
 import sys
 
