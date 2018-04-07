@@ -5,18 +5,20 @@ from PIL import ImageTk, Image
 class Monster(object):
     all_monsters = []
     
-    def __init__(self, data, color):
-        self.color = color
+    def __init__(self, data):
         self.size = data.cellSize
         self.r, self.c = data.monsterCenter[0], data.monsterCenter[1]
         Monster.all_monsters.append(self)
     
     
-    def draw(self, data, canvas):
+    def draw(self, canvas):
     #image from http://chapmanworld.com/wp-content/uploads/2015/02/pacman.png
         r = self.size
         monster = Image.open('redMonster.png')
         canvas.image = ImageTk.PhotoImage(monster)
+        canvas.create_image(self.r, self.c, image= canvas.image)
+        
+
 
     def move(self, data, dr, dc):
     #moves monster
